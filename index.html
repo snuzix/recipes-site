@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+  <meta name="color-scheme" content="light dark">
+  <title>Холодильник → Рецепт</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- ✅ Убраны лишние пробелы -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <div class="logo">
+          <div class="logo-icon">Х→Р</div>
+          <h1 class="logo-text">Холодильник → Рецепт</h1>
+        </div>
+        <div class="header-actions">
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Сменить тему">
+            <i class="fas fa-moon"></i>
+          </button>
+          <button id="addProductsBtn" class="btn btn-accent">
+            <i class="fas fa-plus"></i> Добавить продукты
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h2 class="hero-title">Что приготовить из того, что уже есть?</h2>
+          <p class="hero-subtitle">
+            Введите 2+ продукта — и мы подберём идеальный рецепт за 5 секунд.
+          </p>
+
+          <!-- Fridge visual (placeholder animation) -->
+          <div class="fridge-placeholder">
+            <div class="fridge-door"></div>
+            <div class="fridge-body">
+              <div class="product-placeholder" style="--delay: 0.1s;"></div>
+              <div class="product-placeholder" style="--delay: 0.2s;"></div>
+              <div class="product-placeholder" style="--delay: 0.3s;"></div>
+              <div class="product-placeholder" style="--delay: 0.4s;"></div>
+            </div>
+          </div>
+
+          <!-- Product Input -->
+          <div class="input-group">
+            <div class="chips-container" id="productChips">
+              <!-- Chips will be rendered here -->
+            </div>
+
+            <div class="input-wrapper">
+              <input type="text"
+                     id="productInput"
+                     placeholder="Например: яйца, сыр, помидор..."
+                     class="input-main"
+                     autocomplete="off">
+              <div id="autocompleteList" class="autocomplete-list"></div>
+              <button id="addProductBtn" class="input-btn">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <button id="searchBtn" class="btn btn-primary btn-search" disabled>
+            🔍 Найти рецепты (<span id="productCount">0</span>)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section id="resultsSection" class="results hidden">
+      <div class="container">
+        <div class="results-header">
+          <h2 class="results-title">Найдено рецептов: <span id="resultsCount">0</span></h2>
+          <div class="filters">
+            <select id="timeFilter" class="filter-select">
+              <option value="">Любое время</option>
+              <option value="15">До 15 мин</option>
+              <option value="30">До 30 мин</option>
+              <option value="60">До 60 мин</option>
+            </select>
+            <select id="difficultyFilter" class="filter-select">
+              <option value="">Любая сложность</option>
+              <option value="easy">Легко</option>
+              <option value="medium">Средне</option>
+              <option value="hard">Сложно</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="recipesGrid" class="recipes-grid">
+          <!-- Recipe cards will appear here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Empty State -->
+    <section id="emptyState" class="empty-state hidden">
+      <div class="container">
+        <div class="empty-icon">😕</div>
+        <h3 class="empty-title">Рецептов не найдено</h3>
+        <p class="empty-text">
+          Попробуйте добавить больше продуктов или изменить фильтры. Например: «яйца, молоко, сыр» → фриттата!
+        </p>
+        <button id="addMoreBtn" class="btn btn-primary">Добавить ещё продуктов</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modals -->
+  <!-- Add Products Modal -->
+  <div id="addProductsModal" class="modal hidden">
+    <div class="modal-overlay" data-close></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Добавьте продукты</h3>
+        <button class="modal-close" data-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <textarea id="bulkInput"
+                  placeholder="яйца, молоко, сыр, помидоры, лук, чеснок..."
+                  class="textarea-bulk"></textarea>
+        <div class="modal-actions">
+          <button id="addBulkBtn" class="btn btn-accent flex-1">Добавить</button>
+          <button class="btn btn-secondary flex-1" data-close>Отмена</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recipe Detail Modal -->
+  <div id="recipeModal" class="modal hidden">
+    <div class="modal-overlay" data-close></div>
+    <div class="modal-content recipe-modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">Название блюда</h2>
+        <button class="modal-close" data-close>&times;</button>
+      </div>
+      <div class="modal-body recipe-body">
+        <div class="recipe-meta" id="modalMeta"></div>
+        
+        <h3>Ингредиенты</h3>
+        <div class="ingredients-grid">
+          <div>
+            <h4 class="text-green-700 font-semibold mb-2">✅ У вас есть</h4>
+            <ul id="availableIngredients" class="space-y-1"></ul>
+          </div>
+          <div>
+            <h4 class="text-gray-600 font-semibold mb-2">🫙 В рецепте</h4>
+            <ul id="allIngredients" class="space-y-1 text-gray-700"></ul>
+          </div>
+        </div>
+
+        <h3 class="mt-6">Пошаговый рецепт</h3>
+        <ol id="recipeSteps" class="steps-list"></ol>
+
+        <div class="modal-actions mt-6">
+          <button id="favoriteBtn" class="btn btn-outline flex-1">
+            <i class="far fa-heart mr-2"></i>
+            <span>В избранное</span>
+          </button>
+          <button class="btn btn-secondary flex-1" data-close>Закрыть</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <!-- ✅ Убраны лишние пробелы -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
