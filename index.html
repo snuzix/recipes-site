@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
   <meta name="color-scheme" content="light dark">
-  <title>Холодильник → Рецепт</title>
+  <title>Готовим Дома</title>
   <link rel="stylesheet" href="style.css">
-  <!-- ✅ Убраны лишние пробелы -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
@@ -16,8 +15,8 @@
     <header class="header">
       <div class="container">
         <div class="logo">
-          <div class="logo-icon">Х→Р</div>
-          <h1 class="logo-text">Холодильник → Рецепт</h1>
+          <div class="logo-icon">🍳</div>
+          <h1 class="logo-text">Готовим Дома</h1>
         </div>
         <div class="header-actions">
           <button id="themeToggle" class="theme-toggle-btn" aria-label="Сменить тему">
@@ -39,21 +38,21 @@
             Введите 2+ продукта — и мы подберём идеальный рецепт за 5 секунд.
           </p>
 
-          <!-- Fridge visual (placeholder animation) -->
+          <!-- Fridge visual -->
           <div class="fridge-placeholder">
             <div class="fridge-door"></div>
             <div class="fridge-body">
-              <div class="product-placeholder" style="--delay: 0.1s;"></div>
-              <div class="product-placeholder" style="--delay: 0.2s;"></div>
-              <div class="product-placeholder" style="--delay: 0.3s;"></div>
-              <div class="product-placeholder" style="--delay: 0.4s;"></div>
+              <div class="product-placeholder"><i class="fas fa-carrot"></i></div>
+              <div class="product-placeholder"><i class="fas fa-cheese"></i></div>
+              <div class="product-placeholder"><i class="fas fa-egg"></i></div>
+              <div class="product-placeholder"><i class="fas fa-apple-alt"></i></div>
             </div>
           </div>
 
           <!-- Product Input -->
           <div class="input-group">
             <div class="chips-container" id="productChips">
-              <!-- Chips will be rendered here -->
+              <!-- Chips -->
             </div>
 
             <div class="input-wrapper">
@@ -69,7 +68,7 @@
             </div>
           </div>
 
-          <button id="searchBtn" class="btn btn-primary btn-search" disabled>
+          <button id="searchBtn" class="btn btn-search" disabled>
             🔍 Найти рецепты (<span id="productCount">0</span>)
           </button>
         </div>
@@ -98,7 +97,7 @@
         </div>
 
         <div id="recipesGrid" class="recipes-grid">
-          <!-- Recipe cards will appear here -->
+          <!-- Cards -->
         </div>
       </div>
     </section>
@@ -109,7 +108,7 @@
         <div class="empty-icon">😕</div>
         <h3 class="empty-title">Рецептов не найдено</h3>
         <p class="empty-text">
-          Попробуйте добавить больше продуктов или изменить фильтры. Например: «яйца, молоко, сыр» → фриттата!
+          Попробуйте добавить больше продуктов или изменить фильтры. Например: «яйца, молоко, сыр» → сырники!
         </p>
         <button id="addMoreBtn" class="btn btn-primary">Добавить ещё продуктов</button>
       </div>
@@ -117,7 +116,6 @@
   </div>
 
   <!-- Modals -->
-  <!-- Add Products Modal -->
   <div id="addProductsModal" class="modal hidden">
     <div class="modal-overlay" data-close></div>
     <div class="modal-content">
@@ -137,7 +135,6 @@
     </div>
   </div>
 
-  <!-- Recipe Detail Modal -->
   <div id="recipeModal" class="modal hidden">
     <div class="modal-overlay" data-close></div>
     <div class="modal-content recipe-modal">
@@ -151,12 +148,12 @@
         <h3>Ингредиенты</h3>
         <div class="ingredients-grid">
           <div>
-            <h4 class="text-green-700 font-semibold mb-2">✅ У вас есть</h4>
-            <ul id="availableIngredients" class="space-y-1"></ul>
+            <h4 class="has-available">✅ У вас есть</h4>
+            <ul id="availableIngredients"></ul>
           </div>
           <div>
-            <h4 class="text-gray-600 font-semibold mb-2">🫙 В рецепте</h4>
-            <ul id="allIngredients" class="space-y-1 text-gray-700"></ul>
+            <h4 class="has-all">🫙 В рецепте</h4>
+            <ul id="allIngredients"></ul>
           </div>
         </div>
 
@@ -174,9 +171,6 @@
     </div>
   </div>
 
-  <!-- Scripts -->
-  <!-- ✅ Убраны лишние пробелы -->
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
